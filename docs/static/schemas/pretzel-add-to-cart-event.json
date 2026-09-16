@@ -36,11 +36,20 @@
           "examples": [
             7
           ]
+        },
+        "items": {
+          "type": "array",
+          "description": "The pretzels added.",
+          "minItems": 1,
+          "items": {
+            "$ref": "./components/pretzel.json"
+          }
         }
       },
       "required": [
         "currency",
-        "value"
+        "value",
+        "items"
       ],
       "additionalProperties": false
     }
