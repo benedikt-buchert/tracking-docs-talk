@@ -28,10 +28,19 @@
           "examples": [
             "EUR"
           ]
+        },
+        "value": {
+          "type": "number",
+          "description": "Sum of price * quantity.",
+          "minimum": 0,
+          "examples": [
+            7
+          ]
         }
       },
       "required": [
-        "currency"
+        "currency",
+        "value"
       ],
       "additionalProperties": false
     }
