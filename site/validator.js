@@ -85,9 +85,14 @@
       allErrors: true,
       strict: false,
       loadSchema: function (uri) {
+        var name = uri.split('/').pop();
         return fetch(resolve(uri), { cache: 'no-store' }).then(function (r) {
-          if (!r.ok) throw new Error('Cannot load schema ' + uri);
-          return r.json();
+          if (!r.ok) throw new Error('Cannot load schema ' + name + ': HTTP ' + r.status);
+          // A typo in the schema lands here, as a JSON parse error. Report it the
+          // same way as a missing file, so a broken schema always reads the same.
+          return r.json().catch(function (e) {
+            throw new Error('Cannot load schema ' + name + ': ' + e.message);
+          });
         });
       },
     }); };
