@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pretzel Add to Cart",
+  "description": "Fires when someone puts pretzels into the cart.",
+  "x-tracking-targets": [
+    "web-datalayer-js"
+  ],
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Points to this schema, so any tool can validate the event.",
+      "const": "http://localhost:3000/schemas/pretzel-add-to-cart-event.json"
+    },
+    "event": {
+      "type": "string",
+      "description": "Event name.",
+      "const": "add_to_cart"
+    },
+    "ecommerce": {
+      "type": "object",
+      "description": "Cart data.",
+      "properties": {
+        "currency": {
+          "type": "string",
+          "description": "ISO 4217 currency code.",
+          "pattern": "^[A-Z]{3}$",
+          "examples": [
+            "EUR"
+          ]
+        }
+      },
+      "required": [
+        "currency"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "$schema",
+    "event",
+    "ecommerce"
+  ]
+}

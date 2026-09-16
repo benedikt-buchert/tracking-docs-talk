@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pretzel",
+  "description": "One pretzel in the cart.",
+  "type": "object",
+  "properties": {
+    "item_id": {
+      "type": "string",
+      "description": "Product ID from the shop system.",
+      "pattern": "^PRZ-[0-9]{3}$",
+      "examples": [
+        "PRZ-001"
+      ]
+    },
+    "item_name": {
+      "type": "string",
+      "description": "Name shown in the shop.",
+      "examples": [
+        "Riesenbreze"
+      ]
+    },
+    "price": {
+      "type": "number",
+      "description": "Unit price in the event currency.",
+      "minimum": 0,
+      "examples": [
+        3.5
+      ]
+    },
+    "quantity": {
+      "type": "integer",
+      "description": "How many pretzels of this kind.",
+      "minimum": 1,
+      "examples": [
+        2
+      ]
+    }
+  },
+  "required": [
+    "item_id",
+    "item_name",
+    "price",
+    "quantity"
+  ],
+  "additionalProperties": false
+}

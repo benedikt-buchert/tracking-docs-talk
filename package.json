@@ -1,0 +1,13 @@
+{
+  "name": "tracking-docs-talk",
+  "private": true,
+  "description": "Analytics Pioneers Summit 2026: Tracking Docs That Don't Suck",
+  "scripts": {
+    "setup": "npm --prefix docs install",
+    "docs": "npm --prefix docs start",
+    "shop": "node site/serve.mjs",
+    "validate": "npm --prefix docs run validate-schemas",
+    "next": "./demo.sh next",
+    "prev": "./demo.sh prev"
+  }
+}

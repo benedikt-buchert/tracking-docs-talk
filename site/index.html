@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brezn Bude 🥨</title>
+<style>
+  :root { --ink:#1f1300; --dough:#fff4e0; --crust:#b45309; --crust-dark:#7c2d12; --card:#ffffff; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color:var(--ink); background:var(--dough); }
+  header { padding:28px 32px 8px; display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
+  h1 { margin:0; font-size:44px; letter-spacing:-.02em; }
+  header p { margin:0; color:var(--crust-dark); font-size:18px; }
+  .cart { margin-left:auto; font-size:22px; font-weight:700; background:var(--card); padding:8px 16px; border-radius:999px; box-shadow:0 2px 8px rgba(124,45,18,.15); }
+  main { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:24px; padding:24px 32px 32px; max-width:1100px; }
+  .p { background:var(--card); border-radius:20px; padding:24px; box-shadow:0 6px 24px rgba(124,45,18,.12); display:flex; flex-direction:column; gap:10px; }
+  .emoji { font-size:84px; line-height:1; }
+  .p h2 { margin:0; font-size:24px; }
+  .price { font-size:20px; color:var(--crust-dark); font-weight:600; }
+  select, button { font:inherit; font-size:17px; border-radius:12px; padding:10px 12px; }
+  select { border:2px solid #f3d9b1; background:#fffaf2; }
+  button { border:0; background:var(--crust); color:#fff; font-weight:700; cursor:pointer; }
+  button:hover { background:var(--crust-dark); }
+  footer { padding:0 32px 32px; color:#92400e; font-size:14px; }
+  kbd { background:#fff; border:1px solid #e7c9a0; border-radius:6px; padding:1px 6px; }
+  @media (max-width:600px){ header,main,footer{padding-left:16px;padding-right:16px} h1{font-size:34px} }
+</style>
+</head>
+<body>
+<header>
+  <h1>Brezn Bude 🥨</h1>
+  <p>Munich's most over-tracked pretzel shop</p>
+  <div class="cart" aria-live="polite">🛒 <span id="count">0</span></div>
+</header>
+
+<main id="shop"></main>
+
+<footer>Demo for "Tracking Docs That Don't Suck". Every click pushes an <code>add_to_cart</code> into the dataLayer.</footer>
+
+<script>
+  window.dataLayer = window.dataLayer || [];
+</script>
+<script src="vendor/ajv2020.min.js"></script>
+<script src="validator.js"></script>
+<script>
+  var SCHEMA = 'http://localhost:3000/schemas/pretzel-add-to-cart-event.json';
+  var PRODUCTS = [
+    { id: 'PRZ-001', name: 'Riesenbreze', price: 3.5, emoji: '🥨' },
+    { id: 'PRZ-002', name: 'Laugenstange', price: 1.8, emoji: '🥖' },
+    { id: 'PRZ-003', name: 'Brezn-Burger', price: 6.9, emoji: '🍔' }
+  ];
+  var count = 0;
+
+  document.getElementById('shop').innerHTML = PRODUCTS.map(function (p, i) {
+    return '<article class="p">' +
+      '<div class="emoji" aria-hidden="true">' + p.emoji + '</div>' +
+      '<h2>' + p.name + '</h2>' +
+      '<div class="price">' + p.price.toFixed(2).replace('.', ',') + ' €</div>' +
+      '<label>Topping <select id="t' + i + '">' +
+        '<option value="salt">Salz</option><option value="cheese">Käse</option>' +
+        '<option value="butter">Butter</option><option value="pumpkin_seeds">Kürbiskerne</option>' +
+      '</select></label>' +
+      '<button data-i="' + i + '">In den Warenkorb</button>' +
+    '</article>';
+  }).join('');
+
+  document.getElementById('shop').addEventListener('click', function (e) {
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    var i = +btn.dataset.i, p = PRODUCTS[i];
+    var qty = 2;
+    window.dataLayer.push({ ecommerce: null });
+    window.dataLayer.push({
+      $schema: SCHEMA,
+      event: 'add_to_cart',
+      ecommerce: {
+        currency: 'EUR',
+        value: +(p.price * qty).toFixed(2),
+        items: [{
+          item_id: p.id,
+          item_name: p.name,
+          price: p.price,
+          quantity: qty,
+          topping: document.getElementById('t' + i).value
+        }]
+      }
+    });
+    count += qty;
+    document.getElementById('count').textContent = count;
+  });
+
+  // Backup for the broken event, in case typing in the console goes wrong on stage.
+  document.addEventListener('keydown', function (e) {
+    if (e.shiftKey && e.key.toLowerCase() === 'n') {
+      window.dataLayer.push({
+        $schema: SCHEMA,
+        event: 'add_to_cart',
+        ecommerce: {
+          currency: 'EUR',
+          value: '7,00',
+          items: [{ item_id: 'PRZ-001', item_name: 'Riesenbreze', price: 3.5, quantity: 2, topping: 'nutella' }]
+        }
+      });
+    }
+  });
+</script>
+</body>
+</html>
