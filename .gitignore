@@ -5,3 +5,4 @@ docs/.docusaurus/
 docs/docs/*.mdx
 .DS_Store
 .serena/
+NOTES.html
