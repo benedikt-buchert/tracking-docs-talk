@@ -4,3 +4,4 @@ docs/.docusaurus/
 # generated from static/schemas on every start/build
 docs/docs/*.mdx
 .DS_Store
+.serena/
