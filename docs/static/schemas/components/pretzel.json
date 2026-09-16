@@ -34,13 +34,27 @@
       "examples": [
         2
       ]
+    },
+    "topping": {
+      "type": "string",
+      "description": "The one true topping. Anything else is a bug.",
+      "enum": [
+        "salt",
+        "cheese",
+        "butter",
+        "pumpkin_seeds"
+      ],
+      "examples": [
+        "salt"
+      ]
     }
   },
   "required": [
     "item_id",
     "item_name",
     "price",
-    "quantity"
+    "quantity",
+    "topping"
   ],
   "additionalProperties": false
 }
